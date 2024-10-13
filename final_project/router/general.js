@@ -55,45 +55,81 @@ public_users.get('/', function (req, res) {
 });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-    for (const isbn in books) {
-        if (isbn === req.params.isbn) {
-            return res.status(200).json({message: books[isbn].title});
-        }
-    }
-    return res.status(404).json({message: 'Book with isbn ' + req.params.isbn + 'not found'});
- });
-  
-// Get book details based on author
-public_users.get('/author/:author',function (req, res) {
-    const found_books = [];
-    for (const isbn in books) {
-        const book = books[isbn];
-        if (book.author === req.params.author) {
-            found_books.push(book.title);
-        }
-    }
-    if (found_books.length > 0) {
-        return res.status(200).json({message: found_books.join('; ')});
-    }
-    return res.status(404).json({message: 'Books with author ' + req.params.author + ' not found'});
+public_users.get('/isbn/:isbn', function (req, res) {
+    let getBooks = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            for (const isbn in books) {
+                if (isbn === req.params.isbn) {
+                    resolve(JSON.stringify(books[isbn]));
+                }
+            }
+        },
+            6000)
+    });
+    //Console log before calling the promise
+    console.log("Before calling promise");
+    //Call the promise and wait for it to be resolved and then print a message.
+    getBooks.then((books) => {
+        console.log(books);
+    });
+    //Console log after calling the promise
+    console.log("After calling promise");
+});
 
+// Get book details based on author
+public_users.get('/author/:author', function (req, res) {
+    let getBooks = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const found_books = [];
+            for (const isbn in books) {
+                const book = books[isbn];
+                if (book.author === req.params.author) {
+                    found_books.push(book.title);
+                }
+            }
+
+            if (found_books.length > 0) {
+                resolve(found_books.join('; '));
+            }
+        },6000)
+    });
+    //Console log before calling the promise
+    console.log("Before calling promise");
+    //Call the promise and wait for it to be resolved and then print a message.
+    getBooks.then((books) => {
+        console.log(books);
+    });
+    //Console log after calling the promise
+    console.log("After calling promise");
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-    const found_books = [];
-    for (const isbn in books) {
-        const book = books[isbn];
-        if (book.title === req.params.title) {
-            found_books.push(book);
-        }
-    }
-    if (found_books.length > 0) {
-        return res.status(200).json({message: found_books});
-    }
-    return res.status(404).json({message: 'Books with title ' + req.params.title + ' not found'});
-
+    let getBooks = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const found_books = [];
+            for (const isbn in books) {
+                const book = books[isbn];
+                if (book.title === req.params.title) {
+                    found_books.push(book);
+                }
+            }
+            if (found_books.length > 0) {
+                resolve(JSON.stringify(found_books));
+            }
+            else {
+                resolve('Books not ofund');
+            }
+        },6000)
+    });
+    //Console log before calling the promise
+    console.log("Before calling promise");
+    //Call the promise and wait for it to be resolved and then print a message.
+    getBooks.then((books) => {
+        console.log(books);
+    });
+    //Console log after calling the promise
+    console.log("After calling promise");
 });
 
 //  Get book review
