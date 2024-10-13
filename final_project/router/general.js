@@ -37,9 +37,21 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+public_users.get('/', function (req, res) {
+    let getBooks = new Promise((resolve,reject) => {
+        setTimeout(() => {
+          resolve(JSON.stringify(books));
+        },
+        6000)
+    });
+    //Console log before calling the promise
+    console.log("Before calling promise");
+    //Call the promise and wait for it to be resolved and then print a message.
+    getBooks.then((books) => {
+        console.log(books);
+    });
+    //Console log after calling the promise
+    console.log("After calling promise");
 });
 
 // Get book details based on ISBN
