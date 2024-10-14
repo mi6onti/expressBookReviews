@@ -40,7 +40,7 @@ public_users.post("/register", (req,res) => {
 public_users.get('/', function (req, res) {
     let getBooks = new Promise((resolve,reject) => {
         setTimeout(() => {
-          resolve(JSON.stringify(books));
+          resolve(books);
         },
         6000)
     });
@@ -48,7 +48,8 @@ public_users.get('/', function (req, res) {
     console.log("Before calling promise");
     //Call the promise and wait for it to be resolved and then print a message.
     getBooks.then((books) => {
-        console.log(books);
+        console.log('Calling the promise.');
+        return res.status(200).json({books: books});
     });
     //Console log after calling the promise
     console.log("After calling promise");
@@ -60,7 +61,7 @@ public_users.get('/isbn/:isbn', function (req, res) {
         setTimeout(() => {
             for (const isbn in books) {
                 if (isbn === req.params.isbn) {
-                    resolve(JSON.stringify(books[isbn]));
+                    resolve(books[isbn]);
                 }
             }
         },
@@ -69,8 +70,8 @@ public_users.get('/isbn/:isbn', function (req, res) {
     //Console log before calling the promise
     console.log("Before calling promise");
     //Call the promise and wait for it to be resolved and then print a message.
-    getBooks.then((books) => {
-        console.log(books);
+    getBooks.then((book) => {
+        return res.status(200).json(book);
     });
     //Console log after calling the promise
     console.log("After calling promise");
@@ -89,7 +90,7 @@ public_users.get('/author/:author', function (req, res) {
             }
 
             if (found_books.length > 0) {
-                resolve(found_books.join('; '));
+                resolve(found_books);
             }
         },6000)
     });
@@ -97,7 +98,7 @@ public_users.get('/author/:author', function (req, res) {
     console.log("Before calling promise");
     //Call the promise and wait for it to be resolved and then print a message.
     getBooks.then((books) => {
-        console.log(books);
+        return res.status(200).json({"booksbyauthor": books});
     });
     //Console log after calling the promise
     console.log("After calling promise");
@@ -115,7 +116,7 @@ public_users.get('/title/:title',function (req, res) {
                 }
             }
             if (found_books.length > 0) {
-                resolve(JSON.stringify(found_books));
+                resolve(found_books);
             }
             else {
                 resolve('Books not ofund');
@@ -126,7 +127,7 @@ public_users.get('/title/:title',function (req, res) {
     console.log("Before calling promise");
     //Call the promise and wait for it to be resolved and then print a message.
     getBooks.then((books) => {
-        console.log(books);
+        return res.status(200).json({"booksbytitle": books});
     });
     //Console log after calling the promise
     console.log("After calling promise");
